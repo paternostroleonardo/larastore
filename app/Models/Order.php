@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -31,5 +33,15 @@ class Order extends Model
         static::creating(function ($model){
             $model->code_order = Str::uuid();
         });
+    }
+
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class, 'id', 'customer_id');
+    }
+
+    public function seller(): HasOne
+    {
+        return $this->hasOne(User::class, 'id', 'seller_id');
     }
 }
