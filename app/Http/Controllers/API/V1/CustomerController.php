@@ -29,10 +29,10 @@ class CustomerController extends ApiController
         }
     }
 
-    public function show(int $id): JsonResponse
+    public function show(int $customer): JsonResponse
     {
         try {
-            $customer = $this->customerRepositories->get($id);
+            $customer = $this->customerRepositories->get($customer);
 
             return $this->showOne($customer);
         } catch (\Throwable $error) {
@@ -54,9 +54,10 @@ class CustomerController extends ApiController
         }
     }
 
-    public function update(UpdateCustomerRequest $request, Customer $customer): JsonResponse
+    public function update(UpdateCustomerRequest $request, $customer): JsonResponse
     {
         try {
+            $customer = Customer::findOrFail($customer);
             $validateData = $request->validated();
 
             $customer->fill($validateData);
@@ -68,9 +69,10 @@ class CustomerController extends ApiController
         }
     }
 
-    public function destroy(Customer $customer): JsonResponse
+    public function destroy(int $customer): JsonResponse
     {
         try {
+            $customer = Customer::findOrFail($customer);
             $this->customerRepositories->delete($customer);
 
             return $this->successResponse('customer deleted successfully', 200);

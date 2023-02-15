@@ -28,10 +28,10 @@ class SellerController extends ApiController
         }
     }
 
-    public function show(int $id): JsonResponse
+    public function show(int $seller): JsonResponse
     {
         try {
-            $seller = $this->sellerRepositories->get($id);
+            $seller = $this->sellerRepositories->get($seller);
 
             return $this->showOne($seller);
         } catch (\Throwable $error) {
@@ -54,13 +54,14 @@ class SellerController extends ApiController
         }
     }
 
-    public function update(UpdateSellerRequest $request, User $user): JsonResponse
+    public function update(UpdateSellerRequest $request, int $seller): JsonResponse
     {
         try {
+            $seller = User::findOrFail($seller);
             $validateData = $request->validated();
 
-            $user->fill($validateData);
-            $seller = $this->sellerRepositories->update($user);
+            $seller->fill($validateData);
+            $seller = $this->sellerRepositories->update($seller);
 
             return $this->showOne($seller);
         } catch (\Throwable $error) {
@@ -68,10 +69,11 @@ class SellerController extends ApiController
         }
     }
 
-    public function destroy(User $user): JsonResponse
+    public function destroy(int $seller): JsonResponse
     {
         try {
-            $this->sellerRepositories->delete($user);
+            $seller = User::findOrFail($seller);
+            $this->sellerRepositories->delete($seller);
 
             return $this->successResponse('seller deleted successfully', 200);
         } catch (\Throwable $error) {
