@@ -24,14 +24,14 @@ class OrderRepositories extends BaseRepository
 
     public function ordersBuyerCustomers()
     {
-        $OrderPayedCustomers = $this->model->where('status', 'PAYED')->with(['customer'])->get();
+        $OrderPayedCustomers = $this->model->where('status', 'PAYED')->with(['customer'])->latest()->simplePaginate(10);
 
         return $OrderPayedCustomers;
     }
 
     public function ordersSellSellers()
     {
-        $OrderSellSellers = $this->model->where('status', 'PAYED')->with(['seller'])->get();
+        $OrderSellSellers = $this->model->where('status', 'PAYED')->with(['seller'])->latest()->simplePaginate(10);
 
         return $OrderSellSellers;
     }

@@ -25,7 +25,7 @@ class BaseRepository
             $query = $query->with($this->relations);
         }
 
-        return $query->get();
+        return $query->latest()->simplePaginate(10);
     }
 
     public function get(int $id)

@@ -43,7 +43,9 @@ class CustomerController extends ApiController
     public function store(StoreCustomerRequest $request): JsonResponse
     {
         try {
-            $customer = new Customer($request->all());
+            $validateData = $request->validated();
+
+            $customer = new Customer($validateData);
             $customer = $this->customerRepositories->save($customer);
 
             return $this->showOne($customer);
@@ -55,7 +57,9 @@ class CustomerController extends ApiController
     public function update(UpdateCustomerRequest $request, Customer $customer): JsonResponse
     {
         try {
-            $customer->fill($request->all());
+            $validateData = $request->validated();
+
+            $customer->fill($validateData);
             $customer = $this->customerRepositories->update($customer);
 
             return $this->showOne($customer);

@@ -42,7 +42,9 @@ class SellerController extends ApiController
     public function store(RegisterRequest $request): JsonResponse
     {
         try {
-            $user = new User($request->all());
+            $validateData = $request->validated();
+
+            $user = new User($validateData);
             $seller = $this->sellerRepositories->save($user);
             $seller->assignRole(User::ROLES['seller']);
 
@@ -55,7 +57,9 @@ class SellerController extends ApiController
     public function update(UpdateSellerRequest $request, User $user): JsonResponse
     {
         try {
-            $user->fill($request->all());
+            $validateData = $request->validated();
+
+            $user->fill($validateData);
             $seller = $this->sellerRepositories->update($user);
 
             return $this->showOne($seller);
