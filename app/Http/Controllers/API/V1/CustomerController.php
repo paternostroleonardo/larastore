@@ -10,7 +10,6 @@ use App\Models\Customer;
 
 class CustomerController extends ApiController
 {
-    //all - show - create - update - delete
 
     private $customerRepositories;
 

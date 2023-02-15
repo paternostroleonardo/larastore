@@ -10,7 +10,6 @@ use App\Models\User;
 
 class SellerController extends ApiController
 {
-    //all - show - create - update - delete
 
     private $sellerRepositories;
 

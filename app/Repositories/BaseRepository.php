@@ -8,11 +8,13 @@ class BaseRepository
 {
     protected $model;
     private $relations;
+    private $status;
 
-    public function __construct(Model $model, array $relations = [])
+    public function __construct(Model $model, array $relations = [],  string $status = null)
     {
         $this->model = $model;
         $this->relations = $relations;
+        $this->status = $status;
     }
 
     public function all()
@@ -23,7 +25,7 @@ class BaseRepository
             $query = $query->with($this->relations);
         }
 
-        return $query->all();
+        return $query->get();
     }
 
     public function get(int $id)
@@ -43,6 +45,13 @@ class BaseRepository
         $model->update();
 
         return $model;
+    }
+
+    public function status(Model $model, $status)
+    {
+        $query = $model->where('status', $status)->get();
+
+        return $query;
     }
 
     public function delete(Model $model)

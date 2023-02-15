@@ -32,6 +32,7 @@ class Order extends Model
     public static function booted(){
         static::creating(function ($model){
             $model->code_order = Str::uuid();
+            $model->status = 1;
         });
     }
 
