@@ -48,7 +48,9 @@ class OrderController extends ApiController
     public function store(StoreOrderRequest $request): JsonResponse
     {
         try {
-            $order = new Order($request->all());
+            $validateData = $request->validated();
+
+            $order = new Order($validateData);
             $order = $this->orderRepositories->save($order);
 
             return $this->showOne($order);
@@ -71,7 +73,9 @@ class OrderController extends ApiController
     public function updateStatus(UpdateStatusOrderRequest $request, Order $order): JsonResponse
     {
         try {
-            $order->fill($request->all());
+            $validateData = $request->validated();
+
+            $order->fill($validateData);
             $order = $this->orderRepositories->updateStatus($request->status);
 
             return $this->showOne($order);
