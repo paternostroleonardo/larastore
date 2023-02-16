@@ -28,10 +28,10 @@ class ProductController extends ApiController
         }
     }
 
-    public function show(int $id): JsonResponse
+    public function show(int $product): JsonResponse
     {
         try {
-            $product = $this->productRepositories->get($id);
+            $product = $this->productRepositories->get($product);
 
             return $this->showOne($product);
         } catch (\Throwable $error) {
@@ -53,9 +53,10 @@ class ProductController extends ApiController
         }
     }
 
-    public function update(UpdateProductRequest $request, Product $product): JsonResponse
+    public function update(UpdateProductRequest $request, int $product): JsonResponse
     {
         try {
+            $product = Product::findOrFail($product);
             $validateData = $request->validated();
 
             $product->fill($validateData);
@@ -67,9 +68,10 @@ class ProductController extends ApiController
         }
     }
 
-    public function destroy(Product $product): JsonResponse
+    public function destroy(int $product): JsonResponse
     {
         try {
+            $product = Product::findOrFail($product);
             $this->productRepositories->delete($product);
 
             return $this->successResponse('product deleted successfully', 200);

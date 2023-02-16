@@ -3,6 +3,8 @@
 use App\Http\Controllers\API\V1\Auth\LoginController;
 use App\Http\Controllers\API\V1\Auth\LogoutController;
 use App\Http\Controllers\API\V1\CustomerController;
+use App\Http\Controllers\API\V1\OrderController;
+use App\Http\Controllers\API\V1\ProductController;
 use App\Http\Controllers\API\V1\SellerController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -45,4 +47,21 @@ Route::prefix('sellers')->group(function () {
     Route::post('/new', [SellerController::class, 'store']);
     Route::put('/update/{seller}', [SellerController::class, 'update']);
     Route::delete('/delete/{seller}', [SellerController::class, 'destroy']);
+});
+
+Route::prefix('products')->group(function () {
+    Route::get('/', [ProductController::class, 'index']);
+    Route::get('/show/{product}', [ProductController::class, 'show']);
+    Route::post('/new', [ProductController::class, 'store']);
+    Route::put('/update/{product}', [ProductController::class, 'update']);
+    Route::delete('/delete/{product}', [ProductController::class, 'destroy']);
+});
+
+Route::prefix('orders')->group(function () {
+    Route::get('/', [OrderController::class, 'index']);
+    Route::get('/show/{order}', [OrderController::class, 'show']);
+    Route::get('/orders-by-customers/{order}', [OrderController::class, 'ordersBuyerByCustomer']);
+    Route::get('/orders-by-sellers/{order}', [OrderController::class, 'ordersSellBySeller']);
+    Route::put('/update-status/{order}', [OrderController::class, 'updateStatus']);
+    Route::delete('/delete/{order}', [OrderController::class, 'destroy']);
 });

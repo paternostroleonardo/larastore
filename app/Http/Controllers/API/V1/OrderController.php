@@ -22,7 +22,7 @@ class OrderController extends ApiController
     public function index(Request $filter): JsonResponse
     {
         try {
-            if ($filter == 'all') {
+            if ($filter->relation == 'all') {
                 $orders = $this->orderRepositories->all($filter);
                 return $this->showAll($orders);
             }
@@ -34,10 +34,10 @@ class OrderController extends ApiController
         }
     }
 
-    public function show(int $id): JsonResponse
+    public function show(int $order): JsonResponse
     {
         try {
-            $order = $this->orderRepositories->get($id);
+            $order = $this->orderRepositories->get($order);
 
             return $this->showOne($order);
         } catch (\Throwable $error) {
@@ -59,9 +59,10 @@ class OrderController extends ApiController
         }
     }
 
-    public function destroy(Order $order): JsonResponse
+    public function destroy(int $order): JsonResponse
     {
         try {
+            $order = Order::findOrFail($order);
             $this->orderRepositories->delete($order);
 
             return $this->successResponse('order deleted successfully', 200);
@@ -70,9 +71,10 @@ class OrderController extends ApiController
         }
     }
 
-    public function updateStatus(UpdateStatusOrderRequest $request, Order $order): JsonResponse
+    public function updateStatus(UpdateStatusOrderRequest $request, int $order): JsonResponse
     {
         try {
+            $order = Order::findOrFail($order);
             $validateData = $request->validated();
 
             $order->fill($validateData);
@@ -84,9 +86,10 @@ class OrderController extends ApiController
         }
     }
 
-    public function ordersByStatus(Order $order, Request $status): JsonResponse
+    public function ordersByStatus(int $order, Request $status): JsonResponse
     {
         try {
+            $order = Order::findOrFail($order);
             $orders = $this->orderRepositories->status($order, $status);
 
             return $this->showAll($orders);
@@ -95,9 +98,10 @@ class OrderController extends ApiController
         }
     }
 
-    public function ordersBuyerByCustomer(Order $order): JsonResponse
+    public function ordersBuyerByCustomer(int $order): JsonResponse
     {
         try {
+            $order = Order::findOrFail($order);
             $OrderPayedCustomers = $this->orderRepositories->ordersBuyerCustomers($order);
 
             return $this->showAll($OrderPayedCustomers);
@@ -106,9 +110,10 @@ class OrderController extends ApiController
         }
     }
 
-    public function ordersSellBySeller(Order $order): JsonResponse
+    public function ordersSellBySeller(int $order): JsonResponse
     {
         try {
+            $order = Order::findOrFail($order);
             $OrderSellSellers = $this->orderRepositories->ordersSellSellers($order);
 
             return $this->showAll($OrderSellSellers);
