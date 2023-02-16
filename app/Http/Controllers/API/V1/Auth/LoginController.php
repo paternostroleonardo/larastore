@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\API\V1\Auth;
 
 use App\Http\Requests\Requests\Auth\RegisterRequest;
-use App\Http\Controllers\API\V1\ApiController;
 use App\Http\Requests\Requests\Auth\LoginRequest;
+use App\Http\Controllers\API\V1\ApiController;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\JsonResponse;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
@@ -41,12 +42,15 @@ class LoginController extends ApiController
             $response = $this->makeRequest($credentials);
             $response['user'] = $user;
 
+            Log::info('user register success' . $user->id . '-' . $user->email);
+
             return $this->showLoginInfo([
                 'me' => $user,
                 'tokens' => $response,
                 'status' => 'SUCCESS',
             ]);
         } catch (\Throwable $error) {
+            Log::debug('Register failed' . $error->getMessage());
             return $this->errorResponse($error->getMessage());
         }
     }
@@ -57,6 +61,8 @@ class LoginController extends ApiController
             $credentials = $this->buildCredentials(request(['username', 'password']));
             $response = $this->makeRequest($credentials);
             $user = User::whereEmail($request->username)->get();
+
+            Log::info('user login with exit' . $user->id . '-' . $user->email);
     
             return $this->showLoginInfo(
                 array_merge(
@@ -67,6 +73,7 @@ class LoginController extends ApiController
                 )
             );
         }  catch (\Throwable $error) {
+            Log::debug('Login failed' . $error->getMessage());
             return $this->errorResponse($error->getMessage());
         }
     }

@@ -4,9 +4,11 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Http\Requests\Requests\StoreProductRequest;
 use App\Http\Requests\Requests\UpdateProductRequest;
-use App\Models\Product;
 use App\Repositories\ProductRepositories;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\JsonResponse;
+use App\Models\Product;
 
 class ProductController extends ApiController
 {
@@ -24,6 +26,7 @@ class ProductController extends ApiController
 
             return $this->showAll($products);
         } catch (\Throwable $error) {
+            Log::debug('list products failed' . $error->getMessage());
             return $this->errorResponse($error->getMessage());
         }
     }
@@ -35,6 +38,7 @@ class ProductController extends ApiController
 
             return $this->showOne($product);
         } catch (\Throwable $error) {
+            Log::debug('show product failed' . $error->getMessage());
             return $this->showNone($error);
         }
     }
@@ -47,8 +51,12 @@ class ProductController extends ApiController
             $product = new Product($validateData);
             $product = $this->productRepositories->save($product);
 
+            $user = Auth::user()->id;
+            Log::info('save product with exit' . $product->code_product . $user);
+
             return $this->showOne($product);
         } catch (\Throwable $error) {
+            Log::debug('save product failed' . $error->getMessage());
             return $this->errorResponse($error->getMessage());
         }
     }
@@ -62,8 +70,12 @@ class ProductController extends ApiController
             $product->fill($validateData);
             $product = $this->productRepositories->update($product);
 
+            $user = Auth::user()->id;
+            Log::info('updated product with exit' . $product->code_product . $user);
+
             return $this->showOne($product);
         } catch (\Throwable $error) {
+            Log::debug('update product failed' . $error->getMessage());
             return $this->errorResponse($error->getMessage());
         }
     }
@@ -74,8 +86,12 @@ class ProductController extends ApiController
             $product = Product::findOrFail($product);
             $this->productRepositories->delete($product);
 
+            $user = Auth::user()->id;
+            Log::info('deleted product with exit' . $product->code_product . $user);
+
             return $this->successResponse('product deleted successfully', 200);
         } catch (\Throwable $error) {
+            Log::debug('delete product failed' . $error->getMessage());
             return $this->errorResponse($error->getMessage());
         }
     }

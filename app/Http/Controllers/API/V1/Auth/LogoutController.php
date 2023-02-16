@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\V1\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -24,6 +25,7 @@ class LogoutController extends Controller
             });
         return $this->successResponse('Logged out successfully', 200);
         } catch (\Throwable $error) {
+            Log::debug('Logout failed' . $error->getMessage());
             return $this->errorResponse($error->getMessage());
         }
     }

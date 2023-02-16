@@ -5,8 +5,10 @@ namespace App\Http\Controllers\API\V1;
 use App\Http\Requests\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Requests\UpdateSellerRequest;
 use App\Repositories\SellerRepositories;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\JsonResponse;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class SellerController extends ApiController
 {
@@ -50,6 +52,7 @@ class SellerController extends ApiController
 
             return $this->showOne($seller);
         } catch (\Throwable $error) {
+            Log::debug('stored seller failed' . $error->getMessage());
             return $this->errorResponse($error->getMessage());
         }
     }
@@ -65,6 +68,7 @@ class SellerController extends ApiController
 
             return $this->showOne($seller);
         } catch (\Throwable $error) {
+            Log::debug('updated seller failed' . $error->getMessage());
             return $this->errorResponse($error->getMessage());
         }
     }
@@ -77,6 +81,7 @@ class SellerController extends ApiController
 
             return $this->successResponse('seller deleted successfully', 200);
         } catch (\Throwable $error) {
+            Log::debug('deleted seller failed' . $error->getMessage());
             return $this->errorResponse($error->getMessage());
         }
     }

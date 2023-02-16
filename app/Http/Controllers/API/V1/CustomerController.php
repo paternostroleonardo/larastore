@@ -5,8 +5,10 @@ namespace App\Http\Controllers\API\V1;
 use App\Http\Requests\Requests\StoreCustomerRequest;
 use App\Http\Requests\Requests\UpdateCustomerRequest;
 use App\Repositories\CustomerRepositories;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\JsonResponse;
 use App\Models\Customer;
+use Illuminate\Support\Facades\Auth;
 
 class CustomerController extends ApiController
 {
@@ -25,6 +27,7 @@ class CustomerController extends ApiController
 
             return $this->showAll($customers);
         } catch (\Throwable $error) {
+            Log::debug('lists customers failed' . $error->getMessage());
             return $this->errorResponse($error->getMessage());
         }
     }
@@ -36,6 +39,7 @@ class CustomerController extends ApiController
 
             return $this->showOne($customer);
         } catch (\Throwable $error) {
+            Log::debug('show customer failed' . $error->getMessage());
             return $this->showNone($error);
         }
     }
@@ -48,8 +52,12 @@ class CustomerController extends ApiController
             $customer = new Customer($validateData);
             $customer = $this->customerRepositories->save($customer);
 
+            $user = Auth::user()->id;
+            Log::info('save customer with exit' . $customer->id . '-' . $customer->email . $user);
+
             return $this->showOne($customer);
         } catch (\Throwable $error) {
+            Log::debug('save customer failed' . $error->getMessage());
             return $this->errorResponse($error->getMessage());
         }
     }
@@ -63,8 +71,12 @@ class CustomerController extends ApiController
             $customer->fill($validateData);
             $customer = $this->customerRepositories->update($customer);
 
+            $user = Auth::user()->id;
+            Log::info('update customer with exit' . $customer->id . '-' . $customer->email . $user);
+
             return $this->showOne($customer);
         } catch (\Throwable $error) {
+            Log::debug('update customer failed' . $error->getMessage());
             return $this->errorResponse($error->getMessage());
         }
     }
@@ -75,8 +87,12 @@ class CustomerController extends ApiController
             $customer = Customer::findOrFail($customer);
             $this->customerRepositories->delete($customer);
 
+            $user = Auth::user()->id;
+            Log::info('deleted customer with exit' . $customer->id . '-' . $customer->email . $user);
+
             return $this->successResponse('customer deleted successfully', 200);
         } catch (\Throwable $error) {
+            Log::debug('deleted customer failed' . $error->getMessage());
             return $this->errorResponse($error->getMessage());
         }
     }
