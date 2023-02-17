@@ -20,33 +20,30 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::prefix('auth')->group(function (){
     Route::post('/login', [LoginController::class, 'login']);
     Route::post('/register', [LoginController::class, 'register']);
 });
 
-Route::prefix('out')->group(function (){
-Route::post('/logout', [LogoutController::class]);
-});
+Route::post('/logout', LogoutController::class);
 
-Route::prefix('customers')->group(function () {
-    Route::get('/', [CustomerController::class, 'index']);
-    Route::get('/show/{customer}', [CustomerController::class, 'show']);
-    Route::post('/new', [CustomerController::class, 'store']);
-    Route::put('/update/{customer}', [CustomerController::class, 'update']);
-    Route::delete('/delete/{customer}', [CustomerController::class, 'destroy']);
-});
+Route::middleware('auth:api')->group(function () {
+    
+    Route::prefix('customers')->group(function () {
+        Route::get('/', [CustomerController::class, 'index']);
+        Route::get('/show/{customer}', [CustomerController::class, 'show']);
+        Route::post('/new', [CustomerController::class, 'store']);
+        Route::put('/update/{customer}', [CustomerController::class, 'update']);
+        Route::delete('/delete/{customer}', [CustomerController::class, 'destroy']);
+    });
 
-Route::prefix('sellers')->group(function () {
-    Route::get('/', [SellerController::class, 'index']);
-    Route::get('/show/{seller}', [SellerController::class, 'show']);
-    Route::post('/new', [SellerController::class, 'store']);
-    Route::put('/update/{seller}', [SellerController::class, 'update']);
-    Route::delete('/delete/{seller}', [SellerController::class, 'destroy']);
+    Route::prefix('sellers')->group(function () {
+        Route::get('/', [SellerController::class, 'index']);
+        Route::get('/show/{seller}', [SellerController::class, 'show']);
+        Route::post('/new', [SellerController::class, 'store']);
+        Route::put('/update/{seller}', [SellerController::class, 'update']);
+        Route::delete('/delete/{seller}', [SellerController::class, 'destroy']);
+    });
 });
 
 Route::prefix('products')->group(function () {

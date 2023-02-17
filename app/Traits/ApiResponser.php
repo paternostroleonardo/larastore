@@ -29,7 +29,7 @@ trait ApiResponser
         );
     }
 
-    protected function showAll(mixed $collection, $code = 200)
+    protected function showAll(object $collection, $code = 200)
     {
 
         return $this->successResponse(
@@ -40,7 +40,7 @@ trait ApiResponser
         );
     }
 
-    protected function showOne($model, $message = 'loader with success', $code = 200)
+    protected function showOne($model, $message = 'Charged successfully', $code = 200)
     {
         return $this->successResponse(
             [
@@ -62,7 +62,7 @@ trait ApiResponser
         );
     }
 
-    protected function showMessage($message = 'loader with success', $code = 200)
+    protected function showMessage($message = 'Charged successfully', $code = 200)
     {
         return $this->successResponse(
             [

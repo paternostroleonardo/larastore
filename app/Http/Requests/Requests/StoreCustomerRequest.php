@@ -30,7 +30,7 @@ class StoreCustomerRequest extends FormRequest
             'full_name' => 'required|string|max:55',
             'address' => 'required|string',
             'type_identification' => 'required|' . Rule::in(Customer::identificationType()),
-            'identification' => 'required|string|min:6'
+            'identification' => 'required|string'
         ];
     }
 }

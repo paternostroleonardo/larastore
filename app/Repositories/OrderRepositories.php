@@ -12,7 +12,7 @@ class OrderRepositories extends BaseRepository
         'customer'
     ];
 
-    public function __construct(Order $order, array $relations)
+    public function __construct(Order $order, array $relations = null)
     {
         if ($relations == 'all') {
             parent::__construct($order, self::RELATIONS);

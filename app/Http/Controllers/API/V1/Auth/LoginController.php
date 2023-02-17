@@ -42,7 +42,7 @@ class LoginController extends ApiController
             $response = $this->makeRequest($credentials);
             $response['user'] = $user;
 
-            Log::info('user register success' . $user->id . '-' . $user->email);
+            Log::info('user register success' . 'username:' . ' ' . $user->email);
 
             return $this->showLoginInfo([
                 'me' => $user,
@@ -55,14 +55,15 @@ class LoginController extends ApiController
         }
     }
 
-    public function login(LoginRequest $request): JsonResponse
+    public function login(LoginRequest $request)
     {
         try {
+
             $credentials = $this->buildCredentials(request(['username', 'password']));
             $response = $this->makeRequest($credentials);
             $user = User::whereEmail($request->username)->get();
 
-            Log::info('user login with exit' . $user->id . '-' . $user->email);
+            Log::info('user login with exit' . 'username:' . '-' . $user[0]->id);
     
             return $this->showLoginInfo(
                 array_merge(
@@ -89,7 +90,7 @@ class LoginController extends ApiController
         return $credentials;
     }
 
-    public function makeRequest(array $credentials): mixed
+    public function makeRequest(array $credentials): array
     {
         $request = Request::create('oauth/token', 'POST', $credentials, [], [], [
             'HTTP_Accept' => 'application/json',

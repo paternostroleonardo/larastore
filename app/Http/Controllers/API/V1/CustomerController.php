@@ -52,8 +52,9 @@ class CustomerController extends ApiController
             $customer = new Customer($validateData);
             $customer = $this->customerRepositories->save($customer);
 
-            $user = Auth::user()->id;
-            Log::info('save customer with exit' . $customer->id . '-' . $customer->email . $user);
+            $user = Auth::user()->email;
+            
+            Log::info('save customer with exit' . $customer->id . '-' . $customer->email . 'by' . '-' .$user);
 
             return $this->showOne($customer);
         } catch (\Throwable $error) {
