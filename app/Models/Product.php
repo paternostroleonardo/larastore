@@ -13,6 +13,9 @@ class Product extends Model
 
     public $table = 'products';
 
+    /****
+     a model product has a unique code
+    ****/
     public static function booted(){
         static::creating(function ($model){
             $model->code_product = Str::uuid();

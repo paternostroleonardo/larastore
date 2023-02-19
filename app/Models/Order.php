@@ -29,18 +29,30 @@ class Order extends Model
         ];
     }
 
-    public static function booted(){
-        static::creating(function ($model){
+    /****
+     the status of an initial order is created 
+     and 
+     has a unique code
+    ****/
+    public static function booted()
+    {
+        static::creating(function ($model) {
             $model->code_order = Str::uuid();
             $model->status = 1;
         });
     }
 
-    public function customer(): BelongsTo
+    /****
+     an order has a customer
+     ****/
+    public function customer(): HasOne
     {
-        return $this->belongsTo(Customer::class, 'id', 'customer_id');
+        return $this->hasOne(Customer::class, 'id', 'customer_id');
     }
 
+    /****
+     an order has a seller
+    ****/
     public function seller(): HasOne
     {
         return $this->hasOne(User::class, 'id', 'seller_id');

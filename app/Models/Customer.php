@@ -27,6 +27,9 @@ class Customer extends Model
         ];
     }
 
+    /****
+     relations inverse model order
+    ****/
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class, 'customer_id', 'id');

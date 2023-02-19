@@ -16,7 +16,7 @@ trait ApiResponser
         );
     }
 
-    protected function errorResponse($message, $code = 500)
+    protected function errorResponse(string $message, $code = 500)
     {
         return response()->json(
             [
@@ -40,7 +40,7 @@ trait ApiResponser
         );
     }
 
-    protected function showOne($model, $message = 'Charged successfully', $code = 200)
+    protected function showOne(object $model, $message = 'Charged successfully', $code = 200)
     {
         return $this->successResponse(
             [
@@ -51,7 +51,7 @@ trait ApiResponser
         );
     }
 
-    protected function showNone($error)
+    protected function showNone(object $error)
     {
         return $this->successResponse(
             [
@@ -59,6 +59,17 @@ trait ApiResponser
                 'error' => $error
             ],
             404
+        );
+    }
+
+    public function successDelete(object $model, $message, $code = 200)
+    {
+        return $this->successResponse(
+            [
+                'data' => $model,
+                'message' => $message . ' ' . 'deleted successfully',
+            ],
+            $code
         );
     }
 

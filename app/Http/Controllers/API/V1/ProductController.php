@@ -19,6 +19,10 @@ class ProductController extends ApiController
         $this->productRepositories = $customerRepositories;
     }
 
+    /**
+     * all products
+     * @return JsonResponse
+     */
     public function index(): JsonResponse
     {
         try {
@@ -31,6 +35,11 @@ class ProductController extends ApiController
         }
     }
 
+    /**
+     * show product
+     * @param int $product
+     * @return JsonResponse
+     */
     public function show(int $product): JsonResponse
     {
         try {
@@ -43,6 +52,11 @@ class ProductController extends ApiController
         }
     }
 
+    /**
+     * store new product
+     * @param StoreProductRequest $request
+     * @return JsonResponse
+     */
     public function store(StoreProductRequest $request): JsonResponse
     {
         try {
@@ -61,6 +75,11 @@ class ProductController extends ApiController
         }
     }
 
+    /**
+     * update product
+     * @param UpdateProductReques $request
+     * @return JsonResponse
+     */
     public function update(UpdateProductRequest $request, int $product): JsonResponse
     {
         try {
@@ -80,6 +99,11 @@ class ProductController extends ApiController
         }
     }
 
+    /**
+     * delete product
+     * @param int $product
+     * @return JsonResponse
+     */
     public function destroy(int $product): JsonResponse
     {
         try {
@@ -89,7 +113,7 @@ class ProductController extends ApiController
             $user = Auth::user()->id;
             Log::info('deleted product with exit' . $product->code_product . $user);
 
-            return $this->successResponse('product deleted successfully', 200);
+            return $this->successDelete($product, 'product');
         } catch (\Throwable $error) {
             Log::debug('delete product failed' . $error->getMessage());
             return $this->errorResponse($error->getMessage());

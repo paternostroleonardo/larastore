@@ -22,7 +22,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $roles = Role::all();
 
         foreach ($roles as $role) {
-            $role->update(['guard_name' => 'web']);
+            $role->update(['guard_name' => 'api']);
         }
     }
 }

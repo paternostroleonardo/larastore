@@ -31,7 +31,7 @@ class LogoutController extends Controller
         }
     }
     
-    protected function revokeAccessAndRefreshTokens($tokenId)
+    protected function revokeAccessAndRefreshTokens($tokenId): void
     {
         $tokenRepository = app('Laravel\Passport\TokenRepository');
         $refreshTokenRepository = app('Laravel\Passport\RefreshTokenRepository');

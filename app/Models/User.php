@@ -46,6 +46,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected $guard_name = 'api';
+
     public function setPasswordAttribute($password)
     {
         $this->attributes['password'] = Hash::make($password);
@@ -57,6 +59,9 @@ class User extends Authenticatable
         'inspector' => 'inspector'
     ];
 
+    /****
+     a model user has a order with relation
+    ****/
     public function order(): HasOne
     {
         return $this->hasOne(Order::class, 'seller_id', 'id');

@@ -20,6 +20,10 @@ class SellerController extends ApiController
         $this->sellerRepositories = $sellerRepositories;
     }
 
+    /**
+     * All sellers
+     * @return JsonResponse
+     */
     public function index(): JsonResponse
     {
         try {
@@ -30,6 +34,11 @@ class SellerController extends ApiController
         }
     }
 
+    /**
+     * Show seller
+     * @param int $seller
+     * @return JsonResponse
+     */
     public function show(int $seller): JsonResponse
     {
         try {
@@ -41,6 +50,11 @@ class SellerController extends ApiController
         }
     }
 
+    /**
+     * save new store
+     * @param RegisterRequest $request
+     * @return JsonResponse
+     */
     public function store(RegisterRequest $request): JsonResponse
     {
         try {
@@ -57,6 +71,12 @@ class SellerController extends ApiController
         }
     }
 
+    /**
+     * update seller
+     * @param UpdateSellerRequest $request
+     * @param int $seller
+     * @return JsonResponse
+     */
     public function update(UpdateSellerRequest $request, int $seller): JsonResponse
     {
         try {
@@ -73,13 +93,18 @@ class SellerController extends ApiController
         }
     }
 
+    /**
+     * delete seller
+     * @param int $seller
+     * @return JsonResponse
+     */
     public function destroy(int $seller): JsonResponse
     {
         try {
             $seller = User::findOrFail($seller);
             $this->sellerRepositories->delete($seller);
 
-            return $this->successResponse('seller deleted successfully', 200);
+            return $this->successDelete($seller, 'seller');
         } catch (\Throwable $error) {
             Log::debug('deleted seller failed' . $error->getMessage());
             return $this->errorResponse($error->getMessage());

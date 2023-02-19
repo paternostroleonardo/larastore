@@ -55,7 +55,7 @@ class LoginController extends ApiController
         }
     }
 
-    public function login(LoginRequest $request)
+    public function login(LoginRequest $request): JsonResponse
     {
         try {
 

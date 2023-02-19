@@ -20,6 +20,10 @@ class CustomerController extends ApiController
         $this->customerRepositories = $customerRepositories;
     }
 
+    /**
+     * All customers
+     * @return JsonResponse
+     */
     public function index(): JsonResponse
     {
         try {
@@ -32,6 +36,11 @@ class CustomerController extends ApiController
         }
     }
 
+    /**
+     * Show customer
+     * @param int $customer
+     * @return JsonResponse
+     */
     public function show(int $customer): JsonResponse
     {
         try {
@@ -44,6 +53,11 @@ class CustomerController extends ApiController
         }
     }
 
+    /**
+     * Save new customer
+     * @param StoreCustomerRequest $request
+     * @return JsonResponse
+     */
     public function store(StoreCustomerRequest $request): JsonResponse
     {
         try {
@@ -53,8 +67,8 @@ class CustomerController extends ApiController
             $customer = $this->customerRepositories->save($customer);
 
             $user = Auth::user()->email;
-            
-            Log::info('save customer with exit' . $customer->id . '-' . $customer->email . 'by' . '-' .$user);
+
+            Log::info('save customer with exit' . $customer->id . '-' . $customer->email . 'by' . '-' . $user);
 
             return $this->showOne($customer);
         } catch (\Throwable $error) {
@@ -63,7 +77,13 @@ class CustomerController extends ApiController
         }
     }
 
-    public function update(UpdateCustomerRequest $request, $customer): JsonResponse
+    /**
+     * update customer
+     * @param UpdateCustomerRequest $request
+     * @param int $customer
+     * @return JsonResponse
+     */
+    public function update(UpdateCustomerRequest $request, int $customer): JsonResponse
     {
         try {
             $customer = Customer::findOrFail($customer);
@@ -82,6 +102,11 @@ class CustomerController extends ApiController
         }
     }
 
+    /**
+     * delete customer
+     * @param int $customer
+     * @return JsonResponse
+     */
     public function destroy(int $customer): JsonResponse
     {
         try {
@@ -91,7 +116,7 @@ class CustomerController extends ApiController
             $user = Auth::user()->id;
             Log::info('deleted customer with exit' . $customer->id . '-' . $customer->email . $user);
 
-            return $this->successResponse('customer deleted successfully', 200);
+            return $this->successDelete($customer, 'customer');
         } catch (\Throwable $error) {
             Log::debug('deleted customer failed' . $error->getMessage());
             return $this->errorResponse($error->getMessage());

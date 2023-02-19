@@ -21,6 +21,10 @@ class OrderController extends ApiController
         $this->orderRepositories = $orderRepositories;
     }
 
+    /**
+     * all orders
+     * @return JsonResponse
+     */
     public function index(Request $filter): JsonResponse
     {
         try {
@@ -37,6 +41,11 @@ class OrderController extends ApiController
         }
     }
 
+    /**
+     * show order
+     * @param int $order
+     * @return JsonResponse
+     */
     public function show(int $order): JsonResponse
     {
         try {
@@ -49,6 +58,11 @@ class OrderController extends ApiController
         }
     }
 
+    /**
+     * store new order
+     * @param StoreOrderRequest $request
+     * @return JsonResponse
+     */
     public function store(StoreOrderRequest $request): JsonResponse
     {
         try {
@@ -67,6 +81,11 @@ class OrderController extends ApiController
         }
     }
 
+    /**
+     * destroy order
+     * @param int $order
+     * @return JsonResponse
+     */
     public function destroy(int $order): JsonResponse
     {
         try {
@@ -76,21 +95,27 @@ class OrderController extends ApiController
             $user = Auth::user()->id;
             Log::info('deleted order with exit' . $order->code_order . $user);
 
-            return $this->successResponse('order deleted successfully', 200);
+            return $this->successDelete($order, 'order');
         } catch (\Throwable $error) {
             Log::debug('deleted order failed' . $error->getMessage());
             return $this->errorResponse($error->getMessage());
         }
     }
 
-    public function updateStatus(UpdateStatusOrderRequest $request, int $order): JsonResponse
+    /**
+     * update order
+     * @param UpdateStatusOrderRequest $request
+     * @param int $order
+     * @return JsonResponse
+     */
+    public function updateStatus(UpdateStatusOrderRequest $request, int $order)
     {
         try {
             $order = Order::findOrFail($order);
             $validateData = $request->validated();
 
             $order->fill($validateData);
-            $order = $this->orderRepositories->updateStatus($request->status);
+            $order = $this->orderRepositories->updateStatus($order);
 
             return $this->showOne($order);
         } catch (\Throwable $error) {
@@ -99,12 +124,16 @@ class OrderController extends ApiController
         }
     }
 
-    public function ordersByStatus(int $order, Request $status): JsonResponse
+    /**
+     * get order by status
+     * @param UpdateStatusOrderRequest $request
+     * @return JsonResponse
+     */
+    public function ordersByStatus(UpdateStatusOrderRequest $request): JsonResponse
     {
         try {
-            $order = Order::findOrFail($order);
-            $orders = $this->orderRepositories->status($order, $status);
-            
+            $orders = $this->orderRepositories->status($request->status);
+
             return $this->showAll($orders);
         } catch (\Throwable $error) {
             Log::debug('list order by status failed' . $error->getMessage());
@@ -112,11 +141,15 @@ class OrderController extends ApiController
         }
     }
 
-    public function ordersBuyerByCustomer(int $order): JsonResponse
+    /**
+     * get order payed by customers
+     * @param int $customer
+     * @return JsonResponse
+     */
+    public function ordersBuyerByCustomer(int $customer): JsonResponse
     {
         try {
-            $order = Order::findOrFail($order);
-            $OrderPayedCustomers = $this->orderRepositories->ordersBuyerCustomers($order);
+            $OrderPayedCustomers = $this->orderRepositories->ordersBuyerCustomers($customer);
 
             return $this->showAll($OrderPayedCustomers);
         } catch (\Throwable $error) {
@@ -125,11 +158,15 @@ class OrderController extends ApiController
         }
     }
 
-    public function ordersSellBySeller(int $order): JsonResponse
+    /**
+     * get order payed by seller
+     * @param int $seller
+     * @return JsonResponse
+     */
+    public function ordersSellBySeller(int $seller): JsonResponse
     {
         try {
-            $order = Order::findOrFail($order);
-            $OrderSellSellers = $this->orderRepositories->ordersSellSellers($order);
+            $OrderSellSellers = $this->orderRepositories->ordersSellSellers($seller);
 
             return $this->showAll($OrderSellSellers);
         } catch (\Throwable $error) {

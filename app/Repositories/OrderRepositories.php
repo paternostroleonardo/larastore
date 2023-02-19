@@ -2,8 +2,9 @@
 
 namespace App\Repositories;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\Paginator;
 use App\Models\Order;
-use Illuminate\Database\Eloquent\Relations\Relation;
 
 class OrderRepositories extends BaseRepository
 {
@@ -22,24 +23,24 @@ class OrderRepositories extends BaseRepository
         parent::__construct($order);
     }
 
-    public function ordersBuyerCustomers()
+    public function ordersBuyerCustomers(int $customer): Paginator
     {
-        $OrderPayedCustomers = $this->model->where('status', 'PAYED')->with(['customer'])->latest()->simplePaginate(10);
+        $OrderPayedCustomers = $this->model->where('status', 'PAYED')->where('customer_id', $customer)->with(['customer'])->latest()->simplePaginate(10);
 
         return $OrderPayedCustomers;
     }
 
-    public function ordersSellSellers()
+    public function ordersSellSellers(int $seller): Paginator
     {
-        $OrderSellSellers = $this->model->where('status', 'PAYED')->with(['seller'])->latest()->simplePaginate(10);
+        $OrderSellSellers = $this->model->where('status', 'PAYED')->where('seller_id', $seller)->with(['seller'])->latest()->simplePaginate(10);
 
         return $OrderSellSellers;
     }
 
-    public function updateStatus(int $status)
+    public function updateStatus(Model $model): Model
     {
-        $order = $this->model->update(['status' => $status]);
+        $model->update();
 
-        return $order;
+        return $model;
     }
 }
