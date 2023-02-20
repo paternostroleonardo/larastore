@@ -62,3 +62,21 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+##steps
+
+php artisan passport:install 
+PASSPORT_CLIENT_ID=2
+PASSPORT_CLIENT_SECRET=evZcA9Z6HVXYZj1GpumVeg1V59MpsylSrDM1uKAZ
+
+---------------------
+
+php artisan migrate --seed
+
+----------------------
+user default root 
+admin@larastore.com
+password
+----------------------
+
+
